@@ -1,0 +1,73 @@
+From 7ad6502ad8f945d7a73298ea0bdb5307f54aeb13 Mon Sep 17 00:00:00 2001
+From: SandroMastronardi <sandro.mastronardi@mastrosoft.com>
+Date: Fri, 10 Oct 2014 13:04:13 +0200
+Subject: [PATCH] fixed paths to relative paths, so it works in root and
+ virtual folders
+
+---
+ UI/Installer/UrlTrackerInstallerService.asmx.cs |  4 ++--
+ UI/UrlTrackerManager.aspx.cs                    | 10 +++++-----
+ UrlTrackerResources.cs                          |  4 ++--
+ 3 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/UI/Installer/UrlTrackerInstallerService.asmx.cs b/UI/Installer/UrlTrackerInstallerService.asmx.cs
+index 45bdcc2..dd22d3e 100644
+--- a/UI/Installer/UrlTrackerInstallerService.asmx.cs
++++ b/UI/Installer/UrlTrackerInstallerService.asmx.cs
+@@ -77,7 +77,7 @@ namespace InfoCaster.Umbraco.UrlTracker.UI.Installer
+ 					foreach (XElement tab in urlTrackerTabs)
+ 					{
+ 						List<XElement> urlTrackerTabControls = tab.Elements("control").ToList();
+-						if (urlTrackerTabControls.Any(x => x.Value == "/Umbraco/UrlTracker/InfoCaster.Umbraco.UrlTracker.UI.UrlTrackerManagerWrapper.ascx"))
++						if (urlTrackerTabControls.Any(x => x.Value == "~/Umbraco/UrlTracker/InfoCaster.Umbraco.UrlTracker.UI.UrlTrackerManagerWrapper.ascx"))
+ 							throw new Exception("Dashboard is already installed.");
+ 					}
+ 				}
+@@ -87,7 +87,7 @@ namespace InfoCaster.Umbraco.UrlTracker.UI.Installer
+ 				urlTrackerTab.Add(new XAttribute("caption", "Url Tracker"));
+ 				XElement urlTrackerControl = new XElement("control");
+ 				urlTrackerControl.Add(new XAttribute("addPanel", true));
+-				urlTrackerControl.SetValue("/Umbraco/UrlTracker/InfoCaster.Umbraco.UrlTracker.UI.UrlTrackerManagerWrapper.ascx");
++				urlTrackerControl.SetValue("~/Umbraco/UrlTracker/InfoCaster.Umbraco.UrlTracker.UI.UrlTrackerManagerWrapper.ascx");
+ 				urlTrackerTab.Add(urlTrackerControl);
+ 				urlTrackerControl.AddBeforeSelf(string.Concat(Environment.NewLine, "      "));
+ 				urlTrackerControl.AddAfterSelf(string.Concat(Environment.NewLine, "    "));
+diff --git a/UI/UrlTrackerManager.aspx.cs b/UI/UrlTrackerManager.aspx.cs
+index d3ad672..959baca 100644
+--- a/UI/UrlTrackerManager.aspx.cs
++++ b/UI/UrlTrackerManager.aspx.cs
+@@ -102,11 +102,11 @@ namespace InfoCaster.Umbraco.UrlTracker.UI
+ 
+                 if (icAutoView == null)
+                 {
+-                    icAutoView = (AutoView)LoadControl("/Umbraco/UrlTracker/InfoCaster.Umbraco.UrlTracker.UI.UserControls.AutoView.ascx");
+-                    icCustomView = (CustomView)LoadControl("/Umbraco/UrlTracker/InfoCaster.Umbraco.UrlTracker.UI.UserControls.CustomView.ascx");
+-                    icNotFoundView = (NotFoundView)LoadControl("/Umbraco/UrlTracker/InfoCaster.Umbraco.UrlTracker.UI.UserControls.NotFoundView.ascx");
+-                    icAdvancedView = (AdvancedView)LoadControl("/Umbraco/UrlTracker/InfoCaster.Umbraco.UrlTracker.UI.UserControls.AdvancedView.ascx");
+-                    icCreateView = (CreateView)LoadControl("/Umbraco/UrlTracker/InfoCaster.Umbraco.UrlTracker.UI.UserControls.CreateView.ascx");
++                    icAutoView = (AutoView)LoadControl("~/Umbraco/UrlTracker/InfoCaster.Umbraco.UrlTracker.UI.UserControls.AutoView.ascx");
++                    icCustomView = (CustomView)LoadControl("~/Umbraco/UrlTracker/InfoCaster.Umbraco.UrlTracker.UI.UserControls.CustomView.ascx");
++                    icNotFoundView = (NotFoundView)LoadControl("~/Umbraco/UrlTracker/InfoCaster.Umbraco.UrlTracker.UI.UserControls.NotFoundView.ascx");
++                    icAdvancedView = (AdvancedView)LoadControl("~/Umbraco/UrlTracker/InfoCaster.Umbraco.UrlTracker.UI.UserControls.AdvancedView.ascx");
++                    icCreateView = (CreateView)LoadControl("~/Umbraco/UrlTracker/InfoCaster.Umbraco.UrlTracker.UI.UserControls.CreateView.ascx");
+ 
+                     pnlEditValidationGroup.Controls.AddAt(0, icAutoView);
+                     pnlEditValidationGroup.Controls.AddAt(1, icCustomView);
+diff --git a/UrlTrackerResources.cs b/UrlTrackerResources.cs
+index e4a9e8f..4f514b5 100644
+--- a/UrlTrackerResources.cs
++++ b/UrlTrackerResources.cs
+@@ -9,8 +9,8 @@ namespace InfoCaster.Umbraco.UrlTracker
+ {
+     public static class UrlTrackerResources
+     {
+-        public static readonly string UrlTrackerManagerUrl = string.Format("/Umbraco/UrlTracker/InfoCaster.Umbraco.UrlTracker.UI.UrlTrackerManager.aspx?culture={0}&uiculture={1}", Thread.CurrentThread.CurrentCulture.ToString(), Thread.CurrentThread.CurrentUICulture.ToString());
+-        public static readonly string UrlTrackerInfoUrl = string.Format("/Umbraco/UrlTracker/InfoCaster.Umbraco.UrlTracker.UI.UrlTrackerInfo.aspx?culture={0}&uiculture={1}", Thread.CurrentThread.CurrentCulture.ToString(), Thread.CurrentThread.CurrentUICulture.ToString());
++        public static readonly string UrlTrackerManagerUrl = string.Format("../UrlTracker/InfoCaster.Umbraco.UrlTracker.UI.UrlTrackerManager.aspx?culture={0}&uiculture={1}", Thread.CurrentThread.CurrentCulture.ToString(), Thread.CurrentThread.CurrentUICulture.ToString());
++        public static readonly string UrlTrackerInfoUrl = string.Format("../UrlTracker/InfoCaster.Umbraco.UrlTracker.UI.UrlTrackerInfo.aspx?culture={0}&uiculture={1}", Thread.CurrentThread.CurrentCulture.ToString(), Thread.CurrentThread.CurrentUICulture.ToString());
+ 
+         public const string RootNode = "Root node";
+         public const string RootNodeInfo = "The root node defines for which domain this redirect is meant";
+-- 
+1.9.4.msysgit.0
+
